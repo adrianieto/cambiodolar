@@ -1,0 +1,42 @@
+h2{
+	color: blue;
+}
+
+div.bkg{
+	background-color: #e9eaed;
+}
+
+div.bkgtdc{
+	background-color: rgba(255,255,255,0.9);
+	padding-left: 38px;
+}
+
+div.banamex{
+	background-image: url("/cambiodolar/images/banamex.png");
+}
+
+div.bancomer{
+	background-image: url("/cambiodolar/images/bancomer.png");
+}
+
+div.banorte{
+	background-image: url("/cambiodolar/images/banorte.png");
+}
+
+div.bkgdate{
+	background-color:  rgba(190,190,190,0.8);
+	padding-left: 38px;
+}
+div.bkgw{
+	background-color: white;
+}
+
+div.bkgw p{
+	font-size: 20px;
+}
+
+div.innercon{
+	padding-top: 20px;
+	padding-bottom: 600px;
+	padding-left: 20px;
+}
