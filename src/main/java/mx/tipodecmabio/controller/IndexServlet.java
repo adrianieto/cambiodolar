@@ -51,13 +51,6 @@ public class IndexServlet extends HttpServlet {
 
 		Date now = new Date();
 
-		Banamex banamexBean = null;
-		Bancomer bancomerBean = null;
-		Banorte banorteBean = null;
-		Hsbc hsbcBean = null;
-		Santander santanderBean = null;
-		Skotiabank skotiaBean = null;
-
 		HashMap<String, String> tipo_de_cambio_banamex = new HashMap<String, String>();
 		HashMap<String, String> tipo_de_cambio_bancomer = new HashMap<String, String>();
 		HashMap<String, String> tipo_de_cambio_banorte = new HashMap<String, String>();
@@ -65,6 +58,14 @@ public class IndexServlet extends HttpServlet {
 		HashMap<String, String> tipo_de_cambio_santander = new HashMap<String, String>();
 		HashMap<String, String> tipo_de_cambio_skotia = new HashMap<String, String>();
 
+		
+		Banamex banamexBean = null;
+		Bancomer bancomerBean = null;
+		Banorte banorteBean = null;
+		Hsbc hsbcBean = null;
+		Santander santanderBean = null;
+		Skotiabank skotiaBean = null;
+		
 		banamexBean = new Banamex();
 		Spider banamex = new BanamexSpider();
 		tipo_de_cambio_banamex = new HashMap<String, String>();
@@ -78,6 +79,7 @@ public class IndexServlet extends HttpServlet {
 				tipo_de_cambio_banamex = banamex.getData(banamex
 						.connectToServer());
 			}
+		}
 
 			banamexBean.setCompra(Float.parseFloat(tipo_de_cambio_banamex
 					.get("compra")));
@@ -139,7 +141,7 @@ public class IndexServlet extends HttpServlet {
 			em.persist(santanderBean);
 			em.persist(skotiaBean);
 			tx.commit();
-		}
+		
 		request.setAttribute("Banorte", banorteBean);
 		request.setAttribute("Banamex", banamexBean);
 		request.setAttribute("Bancomer", bancomerBean);
