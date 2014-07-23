@@ -2,6 +2,7 @@ package mx.tipodecambio.controller.spiders;
 
 import java.io.IOException;
 
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -11,7 +12,14 @@ public class ConnectSpider {
 		Document doc = null;;
 		try {
 			doc = Jsoup.connect(url).userAgent("Mozilla").get();
-		} catch (IOException e) {
+		} catch (HttpStatusException e) {
+			try{
+				doc = Jsoup.connect(url).get();
+			}catch (IOException ex){
+				ex.printStackTrace();
+			}
+			
+		} catch (IOException e){
 			e.printStackTrace();
 		}
 		return doc;

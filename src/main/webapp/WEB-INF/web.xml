@@ -5,6 +5,9 @@
 		xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     
   <display-name>Tipo de cambio dolar</display-name>
+  <listener>
+  	<listener-class>mx.tipodecmabio.controller.TdcBackgroundTask</listener-class>
+  </listener>
   <servlet>
   	<servlet-name>IndexServlet</servlet-name>
   	<servlet-class>mx.tipodecmabio.controller.IndexServlet</servlet-class>
@@ -13,5 +16,12 @@
   	<servlet-name>IndexServlet</servlet-name>
   	<url-pattern>/IndexServlet</url-pattern>
   </servlet-mapping>
-  
+  <context-param>
+  	<param-name>BackgroundTasks</param-name>
+  	<param-value>
+  	mx.tipodecambio.controller.spiders.BanamexSpider, mx.tipodecambio.controller.spiders.BancomerSpider,
+  	mx.tipodecambio.controller.spiders.BanorteSpider, mx.tipodecambio.controller.spiders.HsbcSpider,
+  	mx.tipodecambio.controller.spiders.SantanderSpider, mx.tipodecambio.controller.spiders.SkotiabankSpider
+  	</param-value>
+  </context-param>
 </web-app>
