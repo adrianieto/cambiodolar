@@ -9,23 +9,42 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.jsoup.select.Elements;
+
 import mx.tipodecambio.model.Skotiabank;
+import mx.tipodecmabio.controller.TdcBackgroundTask;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Implementacion de Spider para Skotiabank.
+ * @version 0.5
+ * @author Adrian
+ *
+ */
 public class SkotiabankSpider implements SpiderJson, Runnable {
 	
 	String url = "https://finanzasenlinea.infosel.com/inverlat/dolarinterbancario.ashx";
 	String json = null;
 	HashMap<String, String> tcambio = null;
 
+	/**
+	 * Realiza la conexion al recurso del banco.
+	 * @see ConnectSpider#connectToServer(String)
+	 */
 	public String connectToServer() {
 		json = ConnectSpider.connectToServerJson(url);
 		return json;
 	}
 
+	/**
+	 * Paresea el documento para extraer la data requerida.
+	 * @param doc 
+	 * @return HashMap con los datos
+	 * @see Elements
+	 */
 	public HashMap<String, String> getData(String json) {
 		
 		ObjectMapper m = new ObjectMapper();
@@ -48,6 +67,11 @@ public class SkotiabankSpider implements SpiderJson, Runnable {
 		return tcambio;
 	}
 
+	/**
+	 * Limpia el string para remover caracteres no deseados.
+	 * @param data String con la data
+	 * @return la data limpia
+	 */
 	public String cleanValue(String data) {
 		String cleanedValue = data.replace("\"", "");
 		return cleanedValue.substring(0, 5);
@@ -61,6 +85,14 @@ public class SkotiabankSpider implements SpiderJson, Runnable {
 		return jsonr;
 	}
 
+	/**
+	 * Implementacion de run() para realizar proceso en segundo plano, 
+	 * ademas de persistir la data en la base de datos usando EntityManager.
+	 * 
+	 * @see Runnable
+	 * @see EntityManager
+	 * @see TdcBackgroundTask
+	 */
 	public void run() {
 		EntityManagerFactory emf = Persistence
 				.createEntityManagerFactory("cambiodolar");

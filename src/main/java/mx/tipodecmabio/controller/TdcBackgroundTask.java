@@ -23,6 +23,7 @@ public class TdcBackgroundTask implements ServletContextListener {
     }
 
 	/**
+	 * 
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent sce)  { 
@@ -34,8 +35,7 @@ public class TdcBackgroundTask implements ServletContextListener {
          for(int i=0;i<tasks.length;i++){
         	 try{
             	 Runnable object = (Runnable)Class.forName(tasks[i]).newInstance();
-            	 executor.scheduleAtFixedRate(object, 2, 1, TimeUnit.MINUTES);
-            	 
+            	 executor.scheduleAtFixedRate(object, 0, 5, TimeUnit.MINUTES);
              }catch (Exception e){
             	 e.printStackTrace();
              }

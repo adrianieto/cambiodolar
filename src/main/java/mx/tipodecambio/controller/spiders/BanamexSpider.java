@@ -9,22 +9,40 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import mx.tipodecambio.model.Banamex;
+import mx.tipodecmabio.controller.TdcBackgroundTask;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+/**
+ * Implementacion de Spider para Banamex.
+ * @version 0.5
+ * @author Adrian
+ *
+ */
 public class BanamexSpider implements Spider, Runnable {
 
+	/** Contiene la url del recurso a visitar*/
 	String url = "http://portal.banamex.com.mx/c719_004/economiaFinanzas/es/home?xhost=http://www.banamex.com/";
 	Document doc = null;
 	Elements elements = null;
 	HashMap<String, String> tcambio = null;
 	
+	/**
+	 * Realiza la conexion al recurso del banco.
+	 * @see ConnectSpider#connectToServer(String)
+	 */
 	public Document connectToServer() {
 		doc = ConnectSpider.connectToServer(url);
 		return doc;
 	}
 
+	/**
+	 * Paresea el documento para extraer la data requerida.
+	 * @param doc 
+	 * @return HashMap con los datos
+	 * @see Elements
+	 */
 	public HashMap<String, String> getData(Document doc) {
 		
 		Elements els = doc.select("tr > td");
@@ -34,10 +52,24 @@ public class BanamexSpider implements Spider, Runnable {
 		return tcambio;
 	}
         
+	
+	/**
+	 * Limpia el string para remover caracteres no deseados.
+	 * @param data String con la data
+	 * @return la data limpia
+	 */
 	public String cleanValue(String data) {
 		return data.substring(0,5);
 	}
 
+	/**
+	 * Implementacion de run() para realizar proceso en segundo plano, 
+	 * ademas de persistir la data en la base de datos usando EntityManager.
+	 * 
+	 * @see Runnable
+	 * @see EntityManager
+	 * @see TdcBackgroundTask
+	 */
 	public void run() {
 		
 		EntityManagerFactory emf = Persistence
@@ -67,6 +99,9 @@ public class BanamexSpider implements Spider, Runnable {
 		banamexBean.setVenta(Float.parseFloat(tipo_de_cambio_banamex
 				.get("venta")));
 		banamexBean.setFecha(new Date());
+		
+		
+		//Add logic to see if it should add a new register or not
 		
 		tx.begin();
 		em.persist(banamexBean);
